@@ -1,23 +1,30 @@
 package com.employee.service;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.employee.dto.Employee;
+import com.employee.dto.EmployeeDTO;
+import com.employee.entity.Employee;
+import com.employee.repository.EmployeeRepository;
 
 @Service
 public class EmployeeService {
-	private static List<Employee> employeeList = new LinkedList<Employee>();
+	private static List<EmployeeDTO> employeeList = new LinkedList<EmployeeDTO>();
 	Long employeeCount = (long) employeeList.size();
 
+	@Autowired
+	EmployeeRepository employeeRepository;
+	
 	static {
 		System.out.println("******Static block called******");
-		employeeList.add(new Employee(1, "Jack", "HR", 10000, "HR-Specialist"));
-		employeeList.add(new Employee(2, "Fred", "Admin", 20000, "Admin-Specialist"));
-		employeeList.add(new Employee(3, "Dennis", "IT", 25000, "IT-Specialist"));
+		employeeList.add(new EmployeeDTO(1l, "Jack", "HR", 10000, "HR-Specialist", new Date()));
+		employeeList.add(new EmployeeDTO(2l, "Fred", "Admin", 20000, "Admin-Specialist", new Date()));
+		employeeList.add(new EmployeeDTO(3l, "Dennis", "IT", 25000, "IT-Specialist", new Date()));
 
 	}
 
@@ -28,12 +35,13 @@ public class EmployeeService {
 
 	// Retrieve All employees
 	public List<Employee> getAllEmployees() {
-		return employeeList;
+		//return employeeRepository.findAll();
+		return null;
 	}
 
 	// Retrieve a single employee
-	public Employee getEmployee(long id) {
-		for (Employee e : employeeList) {
+	public EmployeeDTO getEmployee(long id) {
+		for (EmployeeDTO e : employeeList) {
 			if (e.getId() == id) {
 				return e;
 			}
@@ -42,7 +50,7 @@ public class EmployeeService {
 	}
 
 	// Create a new employee
-	public boolean createEmployee(Employee employee) {
+	public boolean createEmployee(EmployeeDTO employee) {
 		if (employee.getId() == null) {
 			employee.setId(++employeeCount);
 		}
@@ -51,16 +59,16 @@ public class EmployeeService {
 	}
 
 	// Update an employee
-	public boolean updateEmployee(Employee employee) {
+	public boolean updateEmployee(EmployeeDTO employee) {
 		boolean success = employeeList.add(employee);
 		return success;
 	}
 
 	// Delete an employee
 	public boolean deleteEmployee(long id) {
-		Iterator<Employee> itr = employeeList.iterator();
+		Iterator<EmployeeDTO> itr = employeeList.iterator();
 		while (itr.hasNext()) {
-			Employee employee = itr.next();
+			EmployeeDTO employee = itr.next();
 			if (employee.getId() == id) {
 				boolean success = employeeList.remove(employee);
 				return success;

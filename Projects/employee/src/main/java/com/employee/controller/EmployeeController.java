@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.employee.dto.Employee;
+import com.employee.dto.EmployeeDTO;
 import com.employee.service.EmployeeService;
 
 @RestController
@@ -20,23 +20,24 @@ public class EmployeeController {
 	EmployeeService employeeService;
 
 	@GetMapping(path = "/getEmployees")
-	public List<Employee> getAllEmployees() {
-		return employeeService.getAllEmployees();
+	public List<EmployeeDTO> getAllEmployees() {
+		// employeeService.getAllEmployees();
+		// return employeeService.getAllEmployees();
+		return null;
 	}
 
 	@GetMapping(path = "/getEmployee/{id}")
-	public Employee getEmployee(@PathVariable Long id) {
+	public EmployeeDTO getEmployee(@PathVariable Long id) {
 		return employeeService.getEmployee(id);
 	}
 
 	@PostMapping(path = "/createEmployee")
-	public boolean createEmployee(@RequestBody Employee employee) {
+	public boolean createEmployee(@RequestBody EmployeeDTO employee) {
 		return employeeService.createEmployee(employee);
 	}
 
 	// @PutMapping
 
-	
 	@DeleteMapping(path = "/deleteEmployee/{id}")
 	public boolean deleteEmployee(@PathVariable Long id) {
 		return employeeService.deleteEmployee(id);
