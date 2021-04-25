@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS Employee;
+  
+CREATE TABLE Employee (
+  id INT AUTO_INCREMENT  PRIMARY KEY,
+  employeeName VARCHAR(250) NOT NULL,
+  department VARCHAR(250) NOT NULL,
+  salary NUMBER(10) NOT NULL,
+  role VARCHAR(250) DEFAULT NULL,
+  birthDate DATE
+);

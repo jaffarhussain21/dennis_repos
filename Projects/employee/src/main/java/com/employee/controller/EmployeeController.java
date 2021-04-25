@@ -21,9 +21,8 @@ public class EmployeeController {
 
 	@GetMapping(path = "/getEmployees")
 	public List<EmployeeDTO> getAllEmployees() {
-		// employeeService.getAllEmployees();
-		// return employeeService.getAllEmployees();
-		return null;
+		return employeeService.getAllEmployees();
+
 	}
 
 	@GetMapping(path = "/getEmployee/{id}")
@@ -32,15 +31,15 @@ public class EmployeeController {
 	}
 
 	@PostMapping(path = "/createEmployee")
-	public boolean createEmployee(@RequestBody EmployeeDTO employee) {
-		return employeeService.createEmployee(employee);
+	public void createEmployee(@RequestBody EmployeeDTO employee) {
+		employeeService.createEmployee(employee);
 	}
 
 	// @PutMapping
 
 	@DeleteMapping(path = "/deleteEmployee/{id}")
-	public boolean deleteEmployee(@PathVariable Long id) {
-		return employeeService.deleteEmployee(id);
+	public void deleteEmployee(@PathVariable Long id) {
+		employeeService.deleteEmployee(id);
 	}
 
 }

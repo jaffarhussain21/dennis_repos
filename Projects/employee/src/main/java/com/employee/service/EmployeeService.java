@@ -1,15 +1,19 @@
 package com.employee.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.employee.dto.EmployeeDTO;
 import com.employee.entity.Employee;
+import com.employee.mapper.DTOMapper;
 import com.employee.repository.EmployeeRepository;
 
 @Service
@@ -18,62 +22,51 @@ public class EmployeeService {
 	Long employeeCount = (long) employeeList.size();
 
 	@Autowired
-	EmployeeRepository employeeRepository;
-	
-	static {
-		System.out.println("******Static block called******");
-		employeeList.add(new EmployeeDTO(1l, "Jack", "HR", 10000, "HR-Specialist", new Date()));
-		employeeList.add(new EmployeeDTO(2l, "Fred", "Admin", 20000, "Admin-Specialist", new Date()));
-		employeeList.add(new EmployeeDTO(3l, "Dennis", "IT", 25000, "IT-Specialist", new Date()));
+	private EmployeeRepository employeeRepository;
 
-	}
+	@Autowired
+	DTOMapper dtoMapper;
 
-	public EmployeeService() {
-		super();
-		System.out.println("******Constructor block called******");
-	}
 
 	// Retrieve All employees
-	public List<Employee> getAllEmployees() {
-		//return employeeRepository.findAll();
-		return null;
+	public List<EmployeeDTO> getAllEmployees() {
+		List<EmployeeDTO> employeeDTOList = new ArrayList<EmployeeDTO>();
+		for (Employee employee : employeeRepository.findAll()) {
+			employeeDTOList.add(dtoMapper.convertToDto(employee));
+		}
+		return employeeDTOList;
+
 	}
 
 	// Retrieve a single employee
 	public EmployeeDTO getEmployee(long id) {
-		for (EmployeeDTO e : employeeList) {
-			if (e.getId() == id) {
-				return e;
-			}
-		}
-		return null;
+		Optional<Employee> employee = employeeRepository.findById(id);
+		return dtoMapper.convertToDtoOptional(employee);
 	}
 
 	// Create a new employee
-	public boolean createEmployee(EmployeeDTO employee) {
-		if (employee.getId() == null) {
-			employee.setId(++employeeCount);
+	public void createEmployee(EmployeeDTO employeeDto) {
+		if (employeeDto.getId() == null) {
+			employeeDto.setId(++employeeCount);
 		}
-		boolean success = employeeList.add(employee);
-		return success;
+		Employee employee = dtoMapper.convertToEntity(employeeDto);
+		employee = employeeRepository.save(employee);
+	}
+
+	// Delete an employee
+	public void deleteEmployee(long id) {
+		employeeRepository.deleteById(id);
+	}
+
+	// Delete an employee
+	public void deleteEmployee(EmployeeDTO employeeDto) {
+		Employee employee = dtoMapper.convertToEntity(employeeDto);
+		employeeRepository.delete(employee);
 	}
 
 	// Update an employee
 	public boolean updateEmployee(EmployeeDTO employee) {
 		boolean success = employeeList.add(employee);
 		return success;
-	}
-
-	// Delete an employee
-	public boolean deleteEmployee(long id) {
-		Iterator<EmployeeDTO> itr = employeeList.iterator();
-		while (itr.hasNext()) {
-			EmployeeDTO employee = itr.next();
-			if (employee.getId() == id) {
-				boolean success = employeeList.remove(employee);
-				return success;
-			}
-		}
-		return false;
 	}
 }

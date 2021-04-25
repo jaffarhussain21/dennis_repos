@@ -11,6 +11,10 @@ public class EmployeeDTO {
 	private String role;
 	private Date birthDate;
 
+	public EmployeeDTO() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	public EmployeeDTO(Long id, String employeeName, String department, double salary, String role, Date birthDate) {
 		super();
 		this.id = id;
